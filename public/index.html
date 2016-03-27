@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div>TODO write content</div>
+        <button type="button" onclick="sendNewWarning()">new warning</button>
+        <script src="http://localhost:9000/socket.io/socket.io.js"></script>
+        <script>
+            var socket = io.connect('http://localhost:9000/warning');
+            var warnings = [];
+
+            socket.on('warnings', function (data) {
+                warnings = data;
+                console.log(data);
+
+            });
+
+            socket.on('new warning', function (warning) {
+                warnings.push(warning);
+                console.log('new warning', warning);
+                console.info('total warnings', warnings);
+            })
+
+            function sendNewWarning() {
+                var i = 100;
+                var newWarning = {
+                    id: i,
+                    Message: "Mensaje de alerta" + i,
+                    TypeOfWarning: {
+                        WarningDesc: "Robo"
+                    },
+                    Localitys: {
+                        latitude: 18.485264 + (i * 0.001),
+                        longitude: -69.825685 + (i * 0.001),
+                        Address: "direccion " + i,
+                        City: "Ciudad " + i,
+                        Country: "Pais " + i,
+                        Sector: "Sector " + i
+                    }
+                }
+
+                socket.emit('publish warning', newWarning);
+            }
+
+
+        </script>
+    </body>
+</html>
