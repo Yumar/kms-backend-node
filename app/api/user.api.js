@@ -5,14 +5,23 @@ module.exports = function (router) {
     
     //login route
     router.post('/login', function(req, res, next){
+        var login = req.body;
         
-        User.find(function (err, users) {
+        User.findOne({'email':login.email}, function (err, user) {
             if (err) {
                 return next(err);
             }
             
-            var firstuser = users[0];
-            res.json(firstuser);
+            if(user){
+                user.comparePassword(login.password, function(error, isMatch){
+                    if(isMatch){
+                        user.password = null;
+                        res.json(user);
+                    }
+                });
+            }else{
+                res.status(403).send('User not found');
+            }
         })
         
     })
