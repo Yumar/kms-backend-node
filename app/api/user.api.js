@@ -17,6 +17,8 @@ module.exports = function (router) {
                     if(isMatch){
                         user.password = null;
                         res.json(user);
+                    } else{
+                       res.status(403).send('Password incorrect'); 
                     }
                 });
             }else{
