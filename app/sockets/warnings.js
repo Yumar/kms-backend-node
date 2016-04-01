@@ -28,24 +28,4 @@ module.exports = function (io) {
                     });
                 });
             });
-            
-    function filterByArea(warnings, notificarionAreas, callback){
-        var filtered = warnings.filter(filterByArea(notificarionAreas));
-        callback(filtered);
-    }
-    
-    function filterByArea(obj, areas){
-        var location = obj.location;
-        var onArea = false
-        if('location' in obj && typeof(location) === 'object'){            
-            for (var i = 0; i < areas.length; i++) {
-               if(areas[i].neighborhood && areas[i].neighborhood === location.neighborhood){
-                   onArea = true;
-                   break;
-               }
-            }            
-        }
-        
-        return onArea;
-    }
 }
