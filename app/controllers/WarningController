@@ -1,0 +1,15 @@
+module.exports = {
+    warningObservers: [],
+    registerObserver: registerObserver,
+    notifyObservers: notifyObservers
+};
+
+function registerObserver(callback) {
+    this.warningObservers.push(callback);
+}
+
+function notifyObservers(newWarning) {
+    for (var i = 0; i < this.warningObservers.length; i++) {
+        this.warningObservers[i](newWarning);
+    }
+}
