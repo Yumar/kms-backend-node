@@ -47,7 +47,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use('/', express.static(path.join(__dirname, '/public')));
+app.use('/', express.static(path.join(__dirname, '../KeepMeSafe.Web/dist')));
 app.use(passport.initialize());
 
 // Bootstrap routes
@@ -87,7 +87,7 @@ app.use(function (err, req, res, next) {
 });
 
 // Start the app by listening on <port>
-var port = process.env.PORT || 9000
+var port = process.env.PORT || 80
 
 server.listen(port, function(){
     console.log('Express listening at port ' + port);

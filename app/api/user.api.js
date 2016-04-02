@@ -6,8 +6,9 @@ module.exports = function (router) {
     //login route
     router.post('/login', function(req, res, next){
         var login = req.body;
+        console.log(login);
         
-        User.findOne({'email':login.email}, function (err, user) {
+        User.findOne({'email':login.username}, function (err, user) {
             if (err) {
                 return next(err);
             }
