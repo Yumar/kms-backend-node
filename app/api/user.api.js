@@ -29,6 +29,9 @@ module.exports = function (router) {
         
     })
     
+    router.delete('/login', function(req, res, next){
+        res.status(200).send("Session ended");
+    })
+    
 }
-
 

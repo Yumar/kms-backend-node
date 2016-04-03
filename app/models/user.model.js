@@ -10,8 +10,8 @@ var RankSchema = Schema({
 
 var NotificationAreaSchema = Schema({
     title: {
-        type:String, 
-        required:true,
+        type: String,
+        required: true,
         index: {unique: true}
     },
     location: {
@@ -27,7 +27,19 @@ var UserSchema = Schema({
         type: Boolean,
         default: true
     },
-    profilePictureUrl: String,
+    location: {
+        latitude: String,
+        longitude: String,
+        street: String,
+        neighborhood: String,
+        city: String,
+        state: String,
+        country: String
+    },
+    profilePictureUrl: {
+        type: String,
+        default: 'profile.jpg'
+    },
     firstname: {
         type: String,
         required: true
