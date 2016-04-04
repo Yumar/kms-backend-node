@@ -87,7 +87,7 @@ app.use(function (err, req, res, next) {
 });
 
 // Start the app by listening on <port>
-var port = process.env.PORT || 80
+var port = process.env.PORT || 80;
 
 server.listen(port, function(){
     console.log('Express listening at port ' + port);
