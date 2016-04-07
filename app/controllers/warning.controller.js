@@ -1,10 +1,37 @@
+var mongoose = require('mongoose');
+var WarningModel = mongoose.model('Warning');
+
 module.exports = {
     messageObservers: [],
+    setRecentHours: setRecentHours,
     registerObserver: registerObserver,
     notifyObservers: notifyObservers,
     verifyWarningArea: isWarningInAreas,
-    filterWarningByAreas: filterByArea
+    filterWarningByAreas: filterByArea,
+    getWarnings: findRecentWarnings,
+    getWarningsInArea: findRecentWarningsInArea
 };
+
+var recentHours = 72;
+var recentWarningQuery = WarningModel.find().where('reportDate').gt(Date.now() - 1000 * 60 * 60 * recentHours * 2);
+
+function setRecentHours(hours) {
+    recentHours = hours;
+}
+
+function findRecentWarningsInArea(areas, callback) {
+    var ors = [];
+    for (var i = 0; i < areas.length; i++) {
+        ors.push({'location.neighborhood': areas[i].location});
+    }
+    recentWarningQuery
+            .or(ors)
+            .exec(callback);
+}
+
+function findRecentWarnings(callback) {
+    recentWarningQuery.exec(callback);
+}
 
 function registerObserver(callback) {
     this.messageObservers.push(callback);
@@ -43,6 +70,6 @@ function isWarningInAreas(warning, areas) {
         }
 
     }
-    
+
     return onArea;
 }
