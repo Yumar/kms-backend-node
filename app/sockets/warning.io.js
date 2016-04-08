@@ -17,19 +17,17 @@ module.exports = function (io) {
                     }
                 }
 
-                if (notificationAreas.length > 0) {
-                    WarningController.getWarningsInArea(notificationAreas, sendWarning);
-                } else {
-                    WarningController.getWarnings(sendWarning);
-                }
-
-
-                WarningController.findRecentWarnings(function (err, warnings) {
-                    if (!err) {
-                        socket.emit('warning:list', warnings);
-                        console.log('warning list send');
+                var init = function () {
+                    console.log("initializing list");
+                    if (notificationAreas.length > 0) {
+                        console.log("customizing list");
+                        WarningController.getWarningsInArea(notificationAreas, sendWarning);
+                    } else {
+                        WarningController.getWarnings(sendWarning);
                     }
-                });
+                }
+                
+                init();
 
                 socket.on('warning:create', function (data) {
                     var newwarning = new WarningModel(data);
@@ -45,7 +43,9 @@ module.exports = function (io) {
                 });
 
                 socket.on('warning:customizeAreas', function (data) {
+                    console.log('customizing for '+data.length+' areas');
                     notificationAreas = data;
+                    init();
                     WarningController.registerObserver(function (newWarning) {
                         var inArea = WarningController.isWarningInAreas(newWarning, notificationAreas);
                         if (inArea) {
@@ -53,5 +53,11 @@ module.exports = function (io) {
                         }
                     })
                 });
-            });
+                
+                socket.on('warning:removeCustomAreas', function () {
+                    notificationAreas = [];
+                    init();     
+                    
+                });
+            }); 
 }

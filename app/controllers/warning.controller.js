@@ -22,7 +22,7 @@ function setRecentHours(hours) {
 function findRecentWarningsInArea(areas, callback) {
     var ors = [];
     for (var i = 0; i < areas.length; i++) {
-        ors.push({'location.neighborhood': areas[i].location});
+        ors.push({'location.neighborhood': areas[i].location.neighborhood});
     }
     recentWarningQuery
             .or(ors)
