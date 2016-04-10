@@ -49,11 +49,11 @@ function filterByArea(warnings, notificarionAreas, callback) {
     callback(filtered);
 }
 
-function isWarningInAreas(warning, areas) {
+function isWarningInAreas(warning, areas, callback) {
     var location = warning.location,
             onArea = false;
 
-    if ('location' in obj && typeof (location) === 'object') {
+    if ('location' in warning && typeof (location) === 'object') {
 
         for (var i = 0; i < areas.length; i++) {
             //verify if neighborhood is on user's warning areas
@@ -70,6 +70,9 @@ function isWarningInAreas(warning, areas) {
         }
 
     }
+    
+    //call callback
+    callback(onArea); 
 
     return onArea;
 }

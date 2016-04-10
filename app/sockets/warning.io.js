@@ -15,7 +15,7 @@ module.exports = function (io) {
                         console.log(err);
                         socket.emit('warning:error', err);
                     }
-                }
+                };
 
                 var init = function () {
                     console.log("initializing list");
@@ -25,8 +25,8 @@ module.exports = function (io) {
                     } else {
                         WarningController.getWarnings(sendWarning);
                     }
-                }
-                
+                };
+
                 init();
 
                 socket.on('warning:create', function (data) {
@@ -43,21 +43,21 @@ module.exports = function (io) {
                 });
 
                 socket.on('warning:customizeAreas', function (data) {
-                    console.log('customizing for '+data.length+' areas');
+                    console.log('customizing for ' + data.length + ' areas');
                     notificationAreas = data;
                     init();
                     WarningController.registerObserver(function (newWarning) {
-                        var inArea = WarningController.isWarningInAreas(newWarning, notificationAreas);
-                        if (inArea) {
+                        WarningController.verifyWarningArea(newWarning, notificationAreas, function () {
+                            console.log('user found in warning area');
                             socket.emit('warning:new', newWarning);
-                        }
-                    })
+                        });
+                    });
                 });
-                
+
                 socket.on('warning:removeCustomAreas', function () {
                     notificationAreas = [];
-                    init();     
-                    
+                    init();
+
                 });
-            }); 
-}
+            });
+};
