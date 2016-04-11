@@ -47,6 +47,7 @@ var UserSchema = Schema({
         required: true
     },
     lastname: String,
+    genre: String,
     phone: {
         type: String,
         required: true
