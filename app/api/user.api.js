@@ -2,6 +2,21 @@ var mongoose = require('mongoose');
 var User = mongoose.model('User');
 
 module.exports = function (router) {
+    router.route('/user/:id')
+            .get(function (req, res) {
+                var id = req.params.id;
+                var query = User.findById(id);
+                query.exec(function (err, user) {
+                    if (err) {
+                        res.status(500).send('server error');
+                    }
+                    if (!user) {
+                        res.status(404).send('user not found');
+                    }
+                    user.password = null;
+                    res.json(user);
+                });
+            })
 
     //login route
     router.post('/login', function (req, res, next) {

@@ -53,11 +53,5 @@ module.exports = function (io) {
                         });
                     });
                 });
-
-                socket.on('warning:removeCustomAreas', function () {
-                    notificationAreas = [];
-                    init();
-
-                });
             });
 };

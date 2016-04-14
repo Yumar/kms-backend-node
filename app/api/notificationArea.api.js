@@ -33,6 +33,10 @@ module.exports = function (router) {
 
                     res.json(user.notificationAreas);
                 });
+            })
+            
+            .delete(function (req, res, next){
+                
             });
 }
 

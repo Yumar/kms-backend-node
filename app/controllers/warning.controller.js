@@ -20,12 +20,13 @@ function setRecentHours(hours) {
 }
 
 function findRecentWarningsInArea(areas, callback) {
-    var ors = [];
+    var areaArr = [];
     for (var i = 0; i < areas.length; i++) {
-        ors.push({'location.neighborhood': areas[i].location.neighborhood});
+        areaArr.push(areas[i].location.neighborhood);
     }
+    console.log(areaArr);
     recentWarningQuery
-            .or(ors)
+            .where('location.neighborhood').in(areaArr)
             .exec(callback);
 }
 
@@ -72,7 +73,7 @@ function isWarningInAreas(warning, areas, callback) {
     }
     
     //call callback
-    callback(onArea); 
+    callback(onArea);
 
     return onArea;
 }
