@@ -13,7 +13,11 @@ module.exports = {
 };
 
 var recentHours = 72;
-var recentWarningQuery = WarningModel.find().where('reportDate').gt(Date.now() - 1000 * 60 * 60 * recentHours * 2);
+var generateRecentWarningQuery = function(){
+    return WarningModel.find()
+            .where('reportDate')
+            .gt(Date.now() - 1000 * 60 * 60 * recentHours * 2);
+}
 
 function setRecentHours(hours) {
     recentHours = hours;
@@ -21,17 +25,19 @@ function setRecentHours(hours) {
 
 function findRecentWarningsInArea(areas, callback) {
     var areaArr = [];
+    var customQuery = generateRecentWarningQuery();
+    
     for (var i = 0; i < areas.length; i++) {
         areaArr.push(areas[i].location.neighborhood);
     }
     console.log(areaArr);
-    recentWarningQuery
+    customQuery
             .where('location.neighborhood').in(areaArr)
             .exec(callback);
 }
 
 function findRecentWarnings(callback) {
-    recentWarningQuery.exec(callback);
+    generateRecentWarningQuery().exec(callback);
 }
 
 function registerObserver(callback) {

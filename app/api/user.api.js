@@ -9,9 +9,11 @@ module.exports = function (router) {
                 query.exec(function (err, user) {
                     if (err) {
                         res.status(500).send('server error');
+                        return;
                     }
                     if (!user) {
                         res.status(404).send('user not found');
+                        return;
                     }
                     user.password = null;
                     res.json(user);

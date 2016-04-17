@@ -23,6 +23,7 @@ module.exports = function (io) {
                         console.log("customizing list");
                         WarningController.getWarningsInArea(notificationAreas, sendWarning);
                     } else {
+                        console.log("sending warnings no filtered");
                         WarningController.getWarnings(sendWarning);
                     }
                 };
