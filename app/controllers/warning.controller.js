@@ -13,7 +13,7 @@ module.exports = {
 };
 
 var recentHours = 72;
-var generateRecentWarningQuery = function(){
+var generateRecentWarningQuery = function () {
     return WarningModel.find()
             .where('reportDate')
             .gt(Date.now() - 1000 * 60 * 60 * recentHours * 2);
@@ -26,11 +26,10 @@ function setRecentHours(hours) {
 function findRecentWarningsInArea(areas, callback) {
     var areaArr = [];
     var customQuery = generateRecentWarningQuery();
-    
+
     for (var i = 0; i < areas.length; i++) {
         areaArr.push(areas[i].location.neighborhood);
     }
-    console.log(areaArr);
     customQuery
             .where('location.neighborhood').in(areaArr)
             .exec(callback);
@@ -57,29 +56,18 @@ function filterByArea(warnings, notificarionAreas, callback) {
 }
 
 function isWarningInAreas(warning, areas, callback) {
-    var location = warning.location,
-            onArea = false;
-
+    var location = warning.location;
     if ('location' in warning && typeof (location) === 'object') {
 
         for (var i = 0; i < areas.length; i++) {
             //verify if neighborhood is on user's warning areas
-            if (areas[i].neighborhood && areas[i].neighborhood === location.neighborhood)
+            if (areas[i].neighborhood && areas[i].neighborhood === location.neighborhood) {
+                callback();
                 return true;
-
-            //verify if city is on user's warning areas
-            if (areas[i].city && areas[i].city === location.city)
-                return true;
-
-            //verify if city is on user's warning areas
-            if (areas[i].country && areas[i].country === location.country)
-                return true;
+            }else{
+                console.log(areas[i].neighborhood + ' not equals '+location.neighborhood);
+            }
         }
 
     }
-    
-    //call callback
-    callback(onArea);
-
-    return onArea;
 }
