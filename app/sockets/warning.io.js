@@ -35,7 +35,7 @@ module.exports = function (io) {
                     newwarning.save(function (err) {
                         if (!err) {
                             console.log('emited new warning');
-                            WarningController.notifyObservers(newwarning);
+                            WarningController.notifyWarningClients(newwarning);
                         } else {
                             console.log(err);
                             socket.emit('warning:error', err);
@@ -47,11 +47,8 @@ module.exports = function (io) {
                     console.log('customizing for ' + data.length + ' areas');
                     notificationAreas = data;
                     init();
-                    WarningController.registerObserver(function (newWarning) {
-                        WarningController.verifyWarningArea(newWarning, notificationAreas, function () {
-                            console.log('user found in warning area');
-                            socket.emit('warning:new', newWarning);
-                        });
+                    WarningController.registerClientAreas(socket.id, notificationAreas, function (newWarning) {
+                        socket.emit('warning:new', newWarning);
                     });
                 });
             });

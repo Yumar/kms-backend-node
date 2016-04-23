@@ -9,7 +9,30 @@ module.exports = {
     verifyWarningArea: isWarningInAreas,
     filterWarningByAreas: filterByArea,
     getWarnings: findRecentWarnings,
-    getWarningsInArea: findRecentWarningsInArea
+    getWarningsInArea: findRecentWarningsInArea,
+    /*new areas filering logic*/
+    clientAreas: {},
+    registerClientAreas: function (clientID, notificationAreas, callback) {
+        this.clientAreas[clientID] = {areas: notificationAreas, callback:callback};
+        console.log('clients: ',this.clientAreas);
+    },
+    flushClientAreas: function (clientID) {
+        delete this.clientAreas[clientID];
+    },
+    notifyWarningClients: function (warning) {
+        var cliens = this.clientAreas;
+        Object.keys(cliens)
+                .forEach(function (key) {
+                    if (cliens[key].areas.length > 0) {
+                        if (isWarningInAreas(warning, cliens[key].areas)) {
+                            cliens[key].callback(warning);
+                        }
+                    }else{
+                        cliens[key].callback(warning);
+                    }
+
+                })
+    }
 };
 
 var recentHours = 72;
@@ -61,11 +84,11 @@ function isWarningInAreas(warning, areas, callback) {
 
         for (var i = 0; i < areas.length; i++) {
             //verify if neighborhood is on user's warning areas
-            if (areas[i].neighborhood && areas[i].neighborhood === location.neighborhood) {
-                callback();
+            if (areas[i].location.neighborhood && areas[i].location.neighborhood == location.neighborhood) {
                 return true;
-            }else{
-                console.log(areas[i].neighborhood + ' not equals '+location.neighborhood);
+            } else {
+                console.log(areas[i].location.neighborhood + ' not equals ' + location.neighborhood);
+                console.log('--------- area:', areas[i])
             }
         }
 
