@@ -18,6 +18,7 @@ module.exports = {
     },
     flushClientAreas: function (clientID) {
         delete this.clientAreas[clientID];
+        console.log('client areas after deleting '+clientID,this.clientAreas);
     },
     notifyWarningClients: function (warning) {
         var cliens = this.clientAreas;

@@ -6,6 +6,8 @@ module.exports = function (io) {
     var warningIO = io
             .of('/warning')
             .on('connection', function (socket) {
+                console.log('socket id' + socket.id);
+
                 var notificationAreas = [];
                 var sendWarning = function (err, warnings) {
                     if (!err) {
@@ -51,5 +53,10 @@ module.exports = function (io) {
                         socket.emit('warning:new', newWarning);
                     });
                 });
+
+                socket.on('disconnect', function () {
+                    WarningController.flushClientAreas(socket.id);
+                });
+
             });
 };
